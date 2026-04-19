@@ -157,6 +157,7 @@ async function seedInitialData() {
   const albumAM = await Album.create({
     mbid: 'a5f4d3b2-6f19-4a1e-8a95-2a958f4d88a9',
     titulo: 'AM',
+    imagemCapa: 'images/albums/am.jpeg',
     anoLancamento: 2013,
     tipo: 'LP',
     artista: arcticMonkeys._id,

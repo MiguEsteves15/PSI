@@ -1,4 +1,4 @@
-//bersão fisica do album
+//versão fisica do album
 
 const mongoose = require('mongoose');
 

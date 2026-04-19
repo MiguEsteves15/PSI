@@ -49,6 +49,11 @@ const albumSchema = new mongoose.Schema(
       required: true,
       trim: true
     },
+    imagemCapa: {
+      type: String,
+      trim: true,
+      default: ''
+    },
     anoLancamento: {
       type: Number,
       required: true,
