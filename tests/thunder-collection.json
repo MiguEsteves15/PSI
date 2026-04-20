@@ -1,0 +1,48 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "PSI-Projeto-Sprint1",
+    "dateExported": "2026-04-20T18:00:00.000Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "name": "US.01 - Registo de Utilizador",
+            "url": "http://localhost:3000/api/users/register",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2026-04-20T18:00:00.000Z",
+            "modified": "2026-04-20T18:00:00.000Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"joaoteste\",\n  \"email\": \"joao@fcul.pt\",\n  \"password\": \"SenhaSegura123!\",\n  \"dataNascimento\": \"2003-05-15\"\n}"
+            }
+        },
+        {
+            "name": "US.02 - Login de Utilizador",
+            "url": "http://localhost:3000/api/users/login",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2026-04-20T18:00:00.000Z",
+            "modified": "2026-04-20T18:00:00.000Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"identifier\": \"joao@fcul.pt\",\n  \"password\": \"SenhaSegura123!\"\n}"
+            }
+        },
+        {
+            "name": "US.02 - Login (Password Errada)",
+            "url": "http://localhost:3000/api/users/login",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2026-04-20T18:00:00.000Z",
+            "modified": "2026-04-20T18:00:00.000Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"identifier\": \"joao@fcul.pt\",\n  \"password\": \"PasswordErrada123!\"\n}"
+            }
+        }
+    ]
+}
