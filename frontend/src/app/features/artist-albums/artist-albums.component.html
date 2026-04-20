@@ -1,0 +1,24 @@
+<section class="artist-albums-page" *ngIf="artistAlbums$ | async as detail">
+  <div class="artist-albums-card">
+    <a class="back-link" [routerLink]="['/artists', detail.artist._id]">&larr; Voltar ao artista</a>
+
+    <div class="header-block">
+      <div>
+        <p class="eyebrow">Lista completa de álbuns</p>
+        <h1>{{ detail.artist.nome }}</h1>
+        <p class="meta">Ordenado por ano de lançamento, do mais recente para o mais antigo.</p>
+      </div>
+    </div>
+
+    <p *ngIf="detail.albums.length === 0" class="empty-message">
+      Este artista ainda nao tem albuns registados.
+    </p>
+
+    <ul *ngIf="detail.albums.length > 0" class="album-list">
+      <li *ngFor="let album of detail.albums">
+        <strong>{{ album.titulo }}</strong>
+        <span>{{ album.anoLancamento }} · {{ album.tipo }}</span>
+      </li>
+    </ul>
+  </div>
+</section>

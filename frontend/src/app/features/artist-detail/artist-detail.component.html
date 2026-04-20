@@ -1,0 +1,39 @@
+<section class="artist-detail-page" *ngIf="artistDetail$ | async as detail">
+  <div class="artist-detail-card">
+    <a class="back-link" routerLink="/">&larr; Voltar à pesquisa</a>
+
+    <div class="artist-header">
+      <div>
+        <p class="eyebrow">Página do artista</p>
+        <h1>{{ detail.artist.nome }}</h1>
+        <p class="meta">ISNI: {{ detail.artist.isni }}</p>
+        <p class="meta">Ano de início de atividade: {{ detail.artist.anoInicioAtividade }}</p>
+      </div>
+      <div class="count-badge">
+        {{ detail.totalAlbums }} álbum{{ detail.totalAlbums === 1 ? '' : 's' }}
+      </div>
+    </div>
+
+    <div class="albums-section">
+      <div class="section-header">
+        <h2>Álbuns recentes</h2>
+        <a class="view-all-link" [routerLink]="['/artists', detail.artist._id, 'albums']">
+          Ver lista completa
+        </a>
+      </div>
+
+      <p *ngIf="detail.recentAlbums.length === 0" class="empty-message">
+        Este artista ainda nao tem albuns registados.
+      </p>
+
+      <ul *ngIf="detail.recentAlbums.length > 0" class="album-list">
+        <li *ngFor="let album of detail.recentAlbums">
+          <div>
+            <strong>{{ album.titulo }}</strong>
+            <p>{{ album.anoLancamento }} · {{ album.tipo }}</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>

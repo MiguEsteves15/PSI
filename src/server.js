@@ -6,6 +6,7 @@ const morgan = require('morgan');
 
 const { connectDatabase } = require('./config/database');
 const userRoutes = require('./routes/userRoutes');
+const artistRoutes = require('./routes/artistRoutes');
 const PORT = process.env.PORT || 3000;
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 
 // Rotas
 app.use('/api/users', userRoutes);
+app.use('/api/artists', artistRoutes);
 
 // Ligar e arrancar
 async function startServer() {

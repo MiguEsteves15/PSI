@@ -1,0 +1,99 @@
+.artist-search-page {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #f7fbff 0%, #e9f4ff 45%, #f5f8f2 100%);
+}
+
+.artist-search-card {
+  width: min(100%, 640px);
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #dbe7f5;
+  box-shadow: 0 12px 30px rgba(10, 40, 80, 0.08);
+  padding: 1.25rem;
+}
+
+h1 {
+  margin: 0;
+  color: #12263a;
+  font-size: 1.9rem;
+}
+
+.subtitle {
+  margin: 0.45rem 0 1.1rem;
+  color: #3b5873;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: #1e3a56;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  border: 1px solid #b8cde5;
+  border-radius: 10px;
+  padding: 0.72rem 0.8rem;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #2f76bb;
+  box-shadow: 0 0 0 3px rgba(47, 118, 187, 0.2);
+}
+
+.results-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.results-list li {
+  border: 1px solid #d7e6f5;
+  border-radius: 10px;
+  padding: 0.72rem 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  align-items: center;
+  background: #fbfdff;
+}
+
+.results-list span {
+  color: #4e6b85;
+  font-size: 0.92rem;
+}
+
+.info-message,
+.error-message {
+  margin: 0.85rem 0 0;
+  font-size: 0.95rem;
+}
+
+.info-message {
+  color: #33506a;
+}
+
+.error-message {
+  color: #b42318;
+}
+
+@media (max-width: 640px) {
+  .artist-search-card {
+    padding: 1rem;
+  }
+
+  .results-list li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

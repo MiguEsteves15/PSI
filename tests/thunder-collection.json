@@ -43,6 +43,15 @@
                 "type": "json",
                 "raw": "{\n  \"identifier\": \"joao@fcul.pt\",\n  \"password\": \"PasswordErrada123!\"\n}"
             }
+        },
+        {
+            "name": "US.05 - Pesquisar Artistas",
+            "url": "http://localhost:3000/api/artists/search?q=ar",
+            "method": "GET",
+            "sortNum": 40000,
+            "created": "2026-04-20T18:00:00.000Z",
+            "modified": "2026-04-20T18:00:00.000Z",
+            "headers": []
         }
     ]
 }

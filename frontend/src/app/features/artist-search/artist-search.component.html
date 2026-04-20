@@ -1,0 +1,33 @@
+<section class="artist-search-page">
+  <div class="artist-search-card">
+    <h1>Pesquisar artistas</h1>
+    <p class="subtitle">Escreve um nome para ver artistas com correspondencia parcial.</p>
+
+    <label for="artist-query">Nome do artista</label>
+    <input
+      id="artist-query"
+      name="artistQuery"
+      type="text"
+      [ngModel]="query"
+      (ngModelChange)="onSearchChange($event)"
+      placeholder="Ex.: Arctic, Kendrick, SZA"
+      autocomplete="off"
+    />
+
+    <p *ngIf="isLoading" class="info-message">A pesquisar artistas...</p>
+    <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+
+    <ul *ngIf="artists.length > 0" class="results-list">
+      <li *ngFor="let artist of artists">
+        <a [routerLink]="['/artists', artist._id]">
+          <strong>{{ artist.nome }}</strong>
+        </a>
+        <span>ISNI: {{ artist.isni }}</span>
+      </li>
+    </ul>
+
+    <p *ngIf="hasSearched && !isLoading && !errorMessage && artists.length === 0" class="info-message">
+      Nenhum artista encontrado para essa pesquisa.
+    </p>
+  </div>
+</section>
