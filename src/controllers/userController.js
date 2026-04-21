@@ -83,3 +83,20 @@ exports.login = async (req, res) => {
         res.status(500).json({ success: false, message: 'Erro interno do servidor.' });
     }
 };
+
+exports.getCurrentUserProfile = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id)
+            .select('-password') // remove a pass do resultado
+            .populate('artistaFavorito', 'nome isni anoInicioAtividade tipoArtista'); // em vez de enivar apenas o id, substitui pelo que decidi
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'Utilizador nao encontrado.' });
+        }
+
+        return res.status(200).json({success: true, data: {user}});
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: 'Erro interno do servidor.' });
+    }
+};

@@ -27,6 +27,19 @@ npm run dev
 ```
 (O servidor ficará à escuta em http://localhost:3000)
 
+### Endpoint do perfil do utilizador autenticado
+Depois de fazer login, usa o token JWT no header:
+```bash
+Authorization: Bearer <token>
+```
+
+Endpoint disponível:
+```bash
+GET /api/users/me
+```
+
+Este endpoint devolve os dados do utilizador autenticado sem a password e com o artista favorito populado, se existir.
+
 ### 2. Frontend (Angular)
 Abra um terminal na raiz do projeto e execute:
 ```bash
