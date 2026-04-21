@@ -45,6 +45,15 @@ exports.register = async (req, res) => {
         });
 
     } catch (error) {
+        // Erro de duplicação (unique constraint)
+        if (error.code === 11000) {
+            const field = Object.keys(error.keyPattern)[0];
+            return res.status(409).json({
+                success: false,
+                message: `${field.charAt(0).toUpperCase() + field.slice(1)} já está registado.`
+            });
+        }
+
         if (error.name === 'ValidationError') {
             const messages = Object.values(error.errors).map(val => val.message);
             return res.status(400).json({ success: false, message: messages.join(', ') });

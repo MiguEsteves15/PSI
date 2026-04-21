@@ -1,0 +1,163 @@
+<section class="signup-page">
+  <div class="signup-card">
+    <h1>Criar Conta</h1>
+    <p class="subtitle">Preencha o formulário para se registar na aplicação.</p>
+
+    <!-- Mensagem de Erro -->
+    <div *ngIf="errorMessage" class="error-message">
+      <span>⚠️ {{ errorMessage }}</span>
+    </div>
+
+    <!-- Mensagem de Sucesso -->
+    <div *ngIf="successMessage" class="success-message">
+      <span>✓ {{ successMessage }}</span>
+    </div>
+
+    <!-- Formulário -->
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="signup-form">
+      <!-- Username -->
+      <div class="form-group">
+        <label for="username">Nome de Utilizador *</label>
+        <input
+          id="username"
+          type="text"
+          formControlName="username"
+          placeholder="Ex.: joao123"
+          autocomplete="username"
+        />
+        <span class="field-error" *ngIf="getErrorMessage('username')">
+          {{ getErrorMessage('username') }}
+        </span>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email *</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Ex.: joao@email.com"
+          autocomplete="email"
+        />
+        <span class="field-error" *ngIf="getErrorMessage('email')">
+          {{ getErrorMessage('email') }}
+        </span>
+      </div>
+
+      <!-- Data de Nascimento -->
+      <div class="form-group">
+        <label for="dataNascimento">Data de Nascimento *</label>
+        <input
+          id="dataNascimento"
+          type="date"
+          formControlName="dataNascimento"
+          [max]="maxBirthDate"
+        />
+        <span class="field-error" *ngIf="getErrorMessage('dataNascimento')">
+          {{ getErrorMessage('dataNascimento') }}
+        </span>
+        <span class="hint">(Deve ter pelo menos 13 anos)</span>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password">Password *</label>
+        <div class="password-input">
+          <input
+            id="password"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Crie uma password segura"
+            autocomplete="new-password"
+          />
+          <button
+            type="button"
+            class="toggle-password"
+            (click)="togglePasswordVisibility()"
+            [title]="showPassword ? 'Ocultar' : 'Mostrar'"
+          >
+            {{ showPassword ? '👁️‍🗨️' : '👁️' }}
+          </button>
+        </div>
+        <span class="field-error" *ngIf="getErrorMessage('password')">
+          {{ getErrorMessage('password') }}
+        </span>
+
+        <!-- Requisitos da Password -->
+        <div class="password-requirements">
+          <p class="requirements-title">A password deve conter:</p>
+          <ul>
+            <li [class.met]="passwordRequirements.minLength">
+              <span class="status">{{ passwordRequirements.minLength ? '✓' : '○' }}</span>
+              Mínimo 8 caracteres
+            </li>
+            <li [class.met]="passwordRequirements.uppercase">
+              <span class="status">{{ passwordRequirements.uppercase ? '✓' : '○' }}</span>
+              Uma letra maiúscula
+            </li>
+            <li [class.met]="passwordRequirements.lowercase">
+              <span class="status">{{ passwordRequirements.lowercase ? '✓' : '○' }}</span>
+              Uma letra minúscula
+            </li>
+            <li [class.met]="passwordRequirements.number">
+              <span class="status">{{ passwordRequirements.number ? '✓' : '○' }}</span>
+              Um número
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Confirmar Password -->
+      <div class="form-group">
+        <label for="confirmPassword">Confirmar Password *</label>
+        <div class="password-input">
+          <input
+            id="confirmPassword"
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            formControlName="confirmPassword"
+            placeholder="Confirme a password"
+            autocomplete="new-password"
+          />
+          <button
+            type="button"
+            class="toggle-password"
+            (click)="toggleConfirmPasswordVisibility()"
+            [title]="showConfirmPassword ? 'Ocultar' : 'Mostrar'"
+          >
+            {{ showConfirmPassword ? '👁️‍🗨️' : '👁️' }}
+          </button>
+        </div>
+        <span class="field-error" *ngIf="getErrorMessage('confirmPassword')">
+          {{ getErrorMessage('confirmPassword') }}
+        </span>
+        <span
+          class="field-error"
+          *ngIf="
+            signupForm.errors?.['passwordMismatch'] &&
+            signupForm.get('confirmPassword')?.touched
+          "
+        >
+          As passwords não coincidem
+        </span>
+      </div>
+
+      <!-- Botão Submit -->
+      <button
+        type="submit"
+        class="submit-btn"
+        [disabled]="signupForm.invalid || isLoading"
+      >
+        <span class="btn-content">
+          <span *ngIf="isLoading" class="spinner"></span>
+          {{ isLoading ? 'A criar conta...' : 'Criar Conta' }}
+        </span>
+      </button>
+    </form>
+
+    <!-- Link para Login -->
+    <div class="login-link">
+      <p>Já tem conta? <a [routerLink]="['/login']">Iniciar sessão</a></p>
+    </div>
+  </div>
+</section>

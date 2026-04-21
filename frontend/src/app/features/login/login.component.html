@@ -1,0 +1,76 @@
+<section class="login-page">
+  <div class="login-card">
+    <h1>Iniciar Sessão</h1>
+    <p class="subtitle">Preencha os dados para aceder à aplicação.</p>
+
+    <!-- Mensagem de Erro -->
+    <div *ngIf="errorMessage" class="error-message">
+      <span>⚠️ {{ errorMessage }}</span>
+    </div>
+
+    <!-- Mensagem de Sucesso -->
+    <div *ngIf="successMessage" class="success-message">
+      <span>✓ {{ successMessage }}</span>
+    </div>
+
+    <!-- Formulário -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <!-- Identifier (Username ou Email) -->
+      <div class="form-group">
+        <label for="identifier">Username ou Email *</label>
+        <input
+          id="identifier"
+          type="text"
+          formControlName="identifier"
+          placeholder="Ex.: joao123 ou joao@email.com"
+          autocomplete="username"
+        />
+        <span class="field-error" *ngIf="getErrorMessage('identifier')">
+          {{ getErrorMessage('identifier') }}
+        </span>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password">Password *</label>
+        <div class="password-input">
+          <input
+            id="password"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Introduza a sua password"
+            autocomplete="current-password"
+          />
+          <button
+            type="button"
+            class="toggle-password"
+            (click)="togglePasswordVisibility()"
+            [title]="showPassword ? 'Ocultar' : 'Mostrar'"
+          >
+            {{ showPassword ? '👁️‍🗨️' : '👁️' }}
+          </button>
+        </div>
+        <span class="field-error" *ngIf="getErrorMessage('password')">
+          {{ getErrorMessage('password') }}
+        </span>
+      </div>
+
+      <!-- Botão Submit -->
+      <button
+        type="submit"
+        class="submit-btn"
+        [disabled]="loginForm.invalid || isLoading"
+      >
+        <span class="btn-content">
+          <span *ngIf="isLoading" class="spinner"></span>
+          {{ isLoading ? 'A fazer login...' : 'Iniciar Sessão' }}
+        </span>
+      </button>
+    </form>
+
+    <!-- Link para Signup -->
+    <div class="signup-link">
+      <p>Não tem conta? <a [routerLink]="['/signup']">Criar conta</a></p>
+    </div>
+  </div>
+</section>
