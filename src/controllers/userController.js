@@ -5,14 +5,15 @@ const jwt = require('jsonwebtoken');
 const SALT_ROUNDS = Number(process.env.SALT_ROUNDS || 10);
 const JWT_SECRET = process.env.JWT_SECRET;
 const TOKEN_EXPIRATION = process.env.TOKEN_EXPIRATION || '2h';
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+const USERNAME_REGEX = /^[A-Za-z0-9]+$/;
 
 exports.register = async (req, res) => {
     try {
         const { username, email, password, dataNascimento } = req.body;
 
         // 1. Validação da password
-        const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\w\W]{8,}$/;
-        if (!passRegex.test(password)) {
+        if (!PASSWORD_REGEX.test(password)) {
             return res.status(400).json({
                 success: false,
                 message: 'A password deve ter pelo menos 8 caracteres, incluindo uma maiúscula, uma minúscula e um número.'
@@ -104,6 +105,129 @@ exports.getCurrentUserProfile = async (req, res) => {
         }
 
         return res.status(200).json({success: true, data: {user}});
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: 'Erro interno do servidor.' });
+    }
+};
+
+exports.updateUsername = async (req, res) => {
+    try {
+        const { username } = req.body;
+
+        if (!username || typeof username !== 'string' || !USERNAME_REGEX.test(username.trim())) {
+            return res.status(400).json({success: false, message: 'O username deve conter apenas letras e numeros.'});
+        }
+
+        const normalizedUsername = username.trim();
+        const currentUser = await User.findById(req.user.id);
+
+        if (!currentUser) {
+            return res.status(404).json({ success: false, message: 'Utilizador nao encontrado.' });
+        }
+
+        if (currentUser.username === normalizedUsername) {
+            return res.status(400).json({ success: false, message: 'Novo username igual ao atual.' });
+        }
+
+        const existingUser = await User.findOne({ username: normalizedUsername});
+        if (existingUser) {
+            return res.status(409).json({ success: false, message: 'Username ja registado.' });
+        }
+
+        currentUser.username = normalizedUsername;
+        await currentUser.save();
+
+        const payload = { id: currentUser._id, username: currentUser.username };
+        const token = jwt.sign(payload, JWT_SECRET, { expiresIn: TOKEN_EXPIRATION });
+
+        return res.status(200).json({
+            success: true,
+            message: 'Username atualizado com sucesso.',
+            data: {
+                user: {
+                    id: currentUser._id,
+                    username: currentUser.username,
+                    email: currentUser.email
+                },
+                token
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: 'Erro interno do servidor.' });
+    }
+};
+
+exports.updatePassword = async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({
+                success: false,
+                message: 'currentPassword e newPassword sao obrigatorios.'
+            });
+        }
+
+        if (!PASSWORD_REGEX.test(newPassword)) {
+            return res.status(400).json({
+                success: false,
+                message: 'A nova password deve ter pelo menos 8 caracteres, incluindo uma maiuscula, uma minuscula e um numero.'
+            });
+        }
+
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'Utilizador nao encontrado.' });
+        }
+
+        const isCurrentPasswordValid = await bcrypt.compare(currentPassword, user.password);
+        if (!isCurrentPasswordValid) {
+            return res.status(401).json({ success: false, message: 'Password errada.' });
+        }
+
+        const isSamePassword = await bcrypt.compare(newPassword, user.password);
+        if (isSamePassword) {
+            return res.status(400).json({ success: false, message: 'A nova password deve ser diferente da atual.' });
+        }
+
+        user.password = await bcrypt.hash(newPassword, SALT_ROUNDS);
+        await user.save();
+
+        return res.status(200).json({
+            success: true,
+            message: 'Password atualizada com sucesso.'
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: 'Erro interno do servidor.' });
+    }
+};
+
+exports.removeFavoriteArtist = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'Utilizador nao encontrado.' });
+        }
+
+        if (!user.artistaFavorito) {
+            return res.status(200).json({
+                success: true,
+                message: 'Utilizador nao tem artista favorito definido.'
+            });
+        }
+
+        user.artistaFavorito = null;
+        await user.save();
+
+        return res.status(200).json({
+            success: true,
+            message: 'Artista favorito removido com sucesso.'
+        });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ success: false, message: 'Erro interno do servidor.' });
