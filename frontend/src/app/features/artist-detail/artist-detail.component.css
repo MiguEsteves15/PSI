@@ -53,6 +53,37 @@ h1 {
   margin-top: 0.35rem;
 }
 
+.favorite-actions {
+  margin-top: 0.9rem;
+}
+
+.favorite-btn {
+  border: 1px solid #2f76bb;
+  background: #2f76bb;
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 0.5rem 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.favorite-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.success-message {
+  margin-top: 0.5rem;
+  color: #1d7a46;
+  font-weight: 600;
+}
+
+.error-message {
+  margin-top: 0.5rem;
+  color: #b33636;
+  font-weight: 600;
+}
+
 .count-badge {
   background: #e8f2fb;
   color: #1e4f7a;

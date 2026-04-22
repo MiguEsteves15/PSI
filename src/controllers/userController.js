@@ -1,6 +1,8 @@
 const User = require('../models/User');
+const Artist = require('../models/Artist');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 
 const SALT_ROUNDS = Number(process.env.SALT_ROUNDS || 10);
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -199,6 +201,60 @@ exports.updatePassword = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: 'Password atualizada com sucesso.'
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: 'Erro interno do servidor.' });
+    }
+};
+
+exports.setFavoriteArtist = async (req, res) => {
+    try {
+        const { artistId } = req.body;
+
+        if (!artistId || !mongoose.Types.ObjectId.isValid(artistId)) {
+            return res.status(400).json({
+                success: false,
+                message: 'artistId invalido.'
+            });
+        }
+
+        const [user, artist] = await Promise.all([
+            User.findById(req.user.id),
+            Artist.findById(artistId).select('_id nome')
+        ]);
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'Utilizador nao encontrado.' });
+        }
+
+        if (!artist) {
+            return res.status(404).json({ success: false, message: 'Artista nao encontrado.' });
+        }
+
+        if (user.artistaFavorito && user.artistaFavorito.toString() === artistId) {
+            return res.status(200).json({
+                success: true,
+                message: 'Este artista ja esta definido como favorito.'
+            });
+        }
+
+        if (user.artistaFavorito && user.artistaFavorito.toString() !== artistId) {
+            return res.status(409).json({
+                success: false,
+                message: 'Ja tens outro artista favorito definido. Remove-o primeiro.'
+            });
+        }
+
+        user.artistaFavorito = artist._id;
+        await user.save();
+
+        return res.status(200).json({
+            success: true,
+            message: 'Artista favorito definido com sucesso.',
+            data: {
+                favoriteArtistId: artist._id
+            }
         });
     } catch (error) {
         console.error(error);

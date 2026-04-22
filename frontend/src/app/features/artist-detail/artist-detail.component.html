@@ -8,6 +8,23 @@
         <h1>{{ detail.artist.nome }}</h1>
         <p class="meta">ISNI: {{ detail.artist.isni }}</p>
         <p class="meta">Ano de início de atividade: {{ detail.artist.anoInicioAtividade }}</p>
+        <div class="favorite-actions">
+          <button
+            type="button"
+            class="favorite-btn"
+            [disabled]="favoriteActionLoading"
+            (click)="onFavoriteToggle(detail.artist._id)">
+            {{
+              !isAuthenticated
+                ? 'Inicie sessao para adicionar o artista aos favoritos'
+                : (isCurrentArtistFavorite(detail.artist._id)
+                  ? 'Remover dos favoritos'
+                  : 'Adicionar aos favoritos')
+            }}
+          </button>
+        </div>
+        <p class="success-message" *ngIf="favoriteSuccessMessage">{{ favoriteSuccessMessage }}</p>
+        <p class="error-message" *ngIf="favoriteErrorMessage">{{ favoriteErrorMessage }}</p>
       </div>
       <div class="count-badge">
         {{ detail.totalAlbums }} álbum{{ detail.totalAlbums === 1 ? '' : 's' }}

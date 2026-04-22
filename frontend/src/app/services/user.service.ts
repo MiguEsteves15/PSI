@@ -24,4 +24,14 @@ export class UserService {
     updatePassword(currentPassword: string, newPassword: string): Observable<any> {
         return this.http.put(`${this.apiUrl}/password`, { currentPassword, newPassword });
     }
+
+    // US7
+    setFavoriteArtist(artistId: string): Observable<any> {
+        return this.http.put(`${this.apiUrl}/favorite-artist`, { artistId });
+    }
+
+    // US7
+    removeFavoriteArtist(): Observable<any> {
+        return this.http.delete(`${this.apiUrl}/favorite-artist`);
+    }
 }
