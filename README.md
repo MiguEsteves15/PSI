@@ -59,3 +59,218 @@ Para voltar ao estado limpo inicial (apenas com os álbuns iniciais):
 ```Bash
 npm run seed
 ```
+
+
+
+
+
+### O que por no .yaml para testar no Swagger
+openapi: 3.0.3
+info:
+  title: PSI API
+  version: 1.0.0
+  description: API de utilizadores e artistas
+servers:
+  - url: http://localhost:3000
+tags:
+  - name: Users
+  - name: Artists
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    RegisterRequest:
+      type: object
+      required:
+        - username
+        - email
+        - password
+        - dataNascimento
+      properties:
+        username:
+          type: string
+          example: joao123
+        email:
+          type: string
+          format: email
+          example: joao@email.com
+        password:
+          type: string
+          example: Password123
+        dataNascimento:
+          type: string
+          format: date
+          example: 2000-05-21
+
+    LoginRequest:
+      type: object
+      required:
+        - identifier
+        - password
+      properties:
+        identifier:
+          type: string
+          example: joao123
+        password:
+          type: string
+          example: Password123
+
+    UpdateUsernameRequest:
+      type: object
+      required:
+        - username
+      properties:
+        username:
+          type: string
+          example: novoUsername
+
+    UpdatePasswordRequest:
+      type: object
+      required:
+        - currentPassword
+        - newPassword
+      properties:
+        currentPassword:
+          type: string
+          example: Password123
+        newPassword:
+          type: string
+          example: NewPassword123
+
+paths:
+  /api/users/register:
+    post:
+      tags:
+        - Users
+      summary: Registar utilizador
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Utilizador criado
+
+  /api/users/login:
+    post:
+      tags:
+        - Users
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login com sucesso (devolve token JWT)
+
+  /api/users/me:
+    get:
+      tags:
+        - Users
+      summary: Perfil do utilizador autenticado
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Perfil devolvido
+        '401':
+          description: Nao autenticado
+
+  /api/users/me/username:
+    put:
+      tags:
+        - Users
+      summary: Atualizar username
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUsernameRequest'
+      responses:
+        '200':
+          description: Username atualizado
+
+  /api/users/me/password:
+    put:
+      tags:
+        - Users
+      summary: Atualizar password
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePasswordRequest'
+      responses:
+        '200':
+          description: Password atualizada
+
+  /api/users/me/favorite-artist:
+    delete:
+      tags:
+        - Users
+      summary: Remover artista favorito
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Artista favorito removido
+
+  /api/artists/search:
+    get:
+      tags:
+        - Artists
+      summary: Pesquisar artistas
+      parameters:
+        - in: query
+          name: q
+          required: true
+          schema:
+            type: string
+          example: metallica
+      responses:
+        '200':
+          description: Lista de artistas
+
+  /api/artists/{id}:
+    get:
+      tags:
+        - Artists
+      summary: Obter artista por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detalhe do artista
+
+  /api/artists/{id}/albums:
+    get:
+      tags:
+        - Artists
+      summary: Obter albuns de um artista
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de albuns do artista
