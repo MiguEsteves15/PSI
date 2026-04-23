@@ -16,18 +16,27 @@
   padding: 40px;
 }
 
-.back-link {
+.back-btn {
   display: inline-block;
-  color: var(--primary);
+  padding: 10px 16px;
+  background: var(--gradient);
+  color: white;
   text-decoration: none;
   font-weight: 600;
   font-size: 14px;
+  border-radius: var(--radius-sm);
   margin-bottom: 20px;
-  transition: color 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
 }
 
-.back-link:hover {
-  color: var(--primary-dark);
+.back-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-btn);
+}
+
+.back-btn:active {
+  transform: translateY(0);
 }
 
 h1 {
@@ -72,25 +81,95 @@ input:focus {
 .results-list {
   list-style: none;
   padding: 0;
-  margin: 20px 0 0;
+  margin: 25px 0 0;
   display: grid;
-  gap: 10px;
+  gap: 12px;
 }
 
 .results-list li {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 12px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
   display: flex;
   justify-content: space-between;
-  gap: 10px;
+  gap: 12px;
   align-items: center;
-  background: #fafafa;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.results-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background: var(--gradient);
+  transition: width 0.3s ease;
+}
+
+.results-list li:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(102, 126, 234, 0.25);
+  border-color: var(--primary);
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+  background-size: 200% 100%;
+  animation: slideGradient 2s ease-in-out infinite;
+}
+
+.results-list li:hover::before {
+  width: 100%;
+  opacity: 0.1;
+}
+
+.results-list a {
+  text-decoration: none;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  z-index: 1;
+}
+
+.results-list a strong {
+  color: var(--text-primary);
+  font-size: 16px;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.results-list li:hover a strong {
+  color: white;
 }
 
 .results-list span {
   color: var(--text-secondary);
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: color 0.2s;
+}
+
+.results-list li:hover span {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+@keyframes slideGradient {
+  0% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 100% center;
+  }
+  100% {
+    background-position: 0% center;
+  }
 }
 
 .info-message {

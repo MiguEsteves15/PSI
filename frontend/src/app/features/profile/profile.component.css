@@ -16,18 +16,27 @@
   padding: 40px;
 }
 
-.back-link {
+.back-btn {
   display: inline-block;
-  color: var(--primary);
+  padding: 10px 16px;
+  background: var(--gradient);
+  color: white;
   text-decoration: none;
   font-weight: 600;
   font-size: 14px;
+  border-radius: var(--radius-sm);
   margin-bottom: 20px;
-  transition: color 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
 }
 
-.back-link:hover {
-  color: var(--primary-dark);
+.back-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-btn);
+}
+
+.back-btn:active {
+  transform: translateY(0);
 }
 
 h1 {
@@ -104,6 +113,128 @@ h1 {
 
 .artist-link:hover {
   color: var(--primary-dark);
+}
+
+/* Botões */
+.edit-toggle-btn,
+.save-btn {
+  padding: 12px 16px;
+  background: var(--gradient);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+  margin-top: 20px;
+}
+
+.edit-toggle-btn:hover:not(:disabled),
+.save-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-btn);
+}
+
+.edit-toggle-btn:active:not(:disabled),
+.save-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.edit-toggle-btn:disabled,
+.save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.edit-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.edit-form {
+  margin-bottom: 25px;
+  padding-bottom: 25px;
+}
+
+.edit-form:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.edit-form h3 {
+  color: var(--text-primary);
+  font-size: 16px;
+  margin: 0 0 15px 0;
+  font-weight: 600;
+}
+
+.edit-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 15px;
+}
+
+.edit-form label {
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.edit-form input[type='text'],
+.edit-form input[type='email'],
+.edit-form input[type='password'],
+.edit-form input[type='date'] {
+  padding: 10px 12px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  transition: border-color 0.3s;
+  font-family: inherit;
+}
+
+.edit-form input[type='text']:focus,
+.edit-form input[type='email']:focus,
+.edit-form input[type='password']:focus,
+.edit-form input[type='date']:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2), inset 0 0 0 1px rgba(102, 126, 234, 0.1);
+  background-color: var(--bg-input);
+}
+
+.edit-form input:disabled {
+  background-color: var(--bg-disabled);
+  cursor: not-allowed;
+}
+
+.field-error {
+  color: var(--error-text);
+  font-size: 12px;
+  margin-top: -2px;
+}
+
+.success-msg {
+  padding: 10px;
+  background-color: var(--success-bg);
+  color: var(--success-text);
+  border: 1px solid var(--success-border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.error-msg {
+  padding: 10px;
+  background-color: var(--error-bg);
+  color: var(--error-text);
+  border: 1px solid var(--error-border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  margin-bottom: 10px;
 }
 
 @media (max-width: 480px) {

@@ -15,18 +15,18 @@
 
     <!-- Formulário -->
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-      <!-- Identifier (Username ou Email) -->
+      <!-- Username -->
       <div class="form-group">
-        <label for="identifier">Username ou Email *</label>
+        <label for="username">Username *</label>
         <input
-          id="identifier"
+          id="username"
           type="text"
-          formControlName="identifier"
-          placeholder="Ex.: joao123 ou joao@email.com"
+          formControlName="username"
+          placeholder="Ex.: joao123"
           autocomplete="username"
         />
-        <span class="field-error" *ngIf="getErrorMessage('identifier')">
-          {{ getErrorMessage('identifier') }}
+        <span class="field-error" *ngIf="getErrorMessage('username')">
+          {{ getErrorMessage('username') }}
         </span>
       </div>
 

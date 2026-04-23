@@ -26,7 +26,7 @@ export class ArtistSearchComponent implements OnDestroy {
   constructor(private readonly artistApiService: ArtistApiService) {
     this.subscription = this.queryChanges$
       .pipe(
-        debounceTime(300),
+        debounceTime(100),
         distinctUntilChanged(),
         tap(() => {
           this.errorMessage = '';

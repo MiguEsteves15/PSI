@@ -119,9 +119,9 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     try {
-        const { identifier, password } = req.body; // O identifier pode ser email ou username
+        const { username, password } = req.body;
 
-        const user = await User.findOne({ $or: [{ username: identifier }, { email: identifier }] });
+        const user = await User.findOne({ username });
         if (!user) {
             return res.status(401).json({ success: false, message: 'Credenciais inválidas.' });
         }

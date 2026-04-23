@@ -17,7 +17,7 @@ interface RegisterResponse {
 }
 
 interface LoginRequest {
-  identifier: string;
+  username: string;
   password: string;
 }
 

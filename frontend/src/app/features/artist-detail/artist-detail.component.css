@@ -16,17 +16,36 @@
 
 .back-link,
 .view-all-link {
-  color: var(--primary);
+  display: inline-block;
+  padding: 10px 16px;
+  color: white;
   text-decoration: none;
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
-  transition: color 0.2s;
+  border-radius: var(--radius-sm);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.back-link {
+  background: var(--gradient);
+  margin-bottom: 20px;
 }
 
 .back-link:hover,
 .view-all-link:hover {
-  color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-btn);
+}
+
+.back-link:active,
+.view-all-link:active {
+  transform: translateY(0);
+}
+
+.view-all-link {
+  color: var(--primary);
+  background: transparent;
 }
 
 .artist-header {

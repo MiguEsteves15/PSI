@@ -28,7 +28,7 @@ export class LoginComponent {
 
   private initializeForm(): void {
     this.loginForm = this.fb.group({
-      identifier: ['', [Validators.required]],
+      username: ['', [Validators.required]],
       password: ['', [Validators.required]]
     });
   }
@@ -47,10 +47,10 @@ export class LoginComponent {
     this.errorMessage = '';
     this.successMessage = '';
 
-    const { identifier, password } = this.loginForm.value;
+    const { username, password } = this.loginForm.value;
 
     this.authService.login({
-      identifier,
+      username,
       password
     }).subscribe({
       next: (response) => {
@@ -85,9 +85,9 @@ export class LoginComponent {
     }
 
     switch (fieldName) {
-      case 'identifier':
+      case 'username':
         if (control.errors['required'])
-          return 'Username ou email é obrigatório';
+          return 'Username é obrigatório';
         break;
       case 'password':
         if (control.errors['required'])
