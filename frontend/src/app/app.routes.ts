@@ -5,16 +5,22 @@ import { ArtistAlbumsComponent } from './features/artist-albums/artist-albums.co
 import { SignupComponent } from './features/signup/signup.component';
 import { LoginComponent } from './features/login/login.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
+import { ProfileComponent } from './features/profile/profile.component';
 import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
 	{
-		path: 'signup',
-		component: SignupComponent
+		path: '',
+		redirectTo: '/login',
+		pathMatch: 'full'
 	},
 	{
 		path: 'login',
 		component: LoginComponent
+	},
+	{
+		path: 'signup',
+		component: SignupComponent
 	},
 	{
 		path: 'dashboard',
@@ -22,19 +28,27 @@ export const routes: Routes = [
 		canActivate: [AuthGuard]
 	},
 	{
-		path: '',
-		component: ArtistSearchComponent
+		path: 'search',
+		component: ArtistSearchComponent,
+		canActivate: [AuthGuard]
+	},
+	{
+		path: 'profile',
+		component: ProfileComponent,
+		canActivate: [AuthGuard]
 	},
 	{
 		path: 'artists/:id',
-		component: ArtistDetailComponent
+		component: ArtistDetailComponent,
+		canActivate: [AuthGuard]
 	},
 	{
 		path: 'artists/:id/albums',
-		component: ArtistAlbumsComponent
+		component: ArtistAlbumsComponent,
+		canActivate: [AuthGuard]
 	},
 	{
 		path: '**',
-		redirectTo: ''
+		redirectTo: '/login'
 	}
 ];

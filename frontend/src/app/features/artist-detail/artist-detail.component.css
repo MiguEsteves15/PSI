@@ -1,40 +1,48 @@
 .artist-detail-page {
-  min-height: 100dvh;
-  padding: 1.25rem;
-  background: linear-gradient(135deg, #f7fbff 0%, #eef6ff 52%, #f8fbf6 100%);
+  min-height: 100vh;
+  background: var(--gradient);
+  padding: 20px;
 }
 
 .artist-detail-card {
-  width: min(100%, 860px);
+  width: 100%;
+  max-width: 860px;
   margin: 0 auto;
-  background: #ffffff;
-  border: 1px solid #d7e6f5;
-  border-radius: 16px;
-  box-shadow: 0 12px 30px rgba(10, 40, 80, 0.08);
-  padding: 1.25rem;
+  background: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 40px;
 }
 
 .back-link,
 .view-all-link {
-  color: #2f76bb;
+  color: var(--primary);
   text-decoration: none;
   font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.back-link:hover,
+.view-all-link:hover {
+  color: var(--primary-dark);
 }
 
 .artist-header {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 20px;
   align-items: start;
-  margin-top: 1rem;
+  margin-top: 20px;
 }
 
 .eyebrow {
-  margin: 0 0 0.35rem;
+  margin: 0 0 6px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #6b7f95;
-  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-size: 11px;
 }
 
 h1,
@@ -44,88 +52,112 @@ p {
 }
 
 h1 {
-  font-size: 2rem;
-  color: #12263a;
+  font-size: 28px;
+  color: var(--text-primary);
 }
 
 .meta {
-  color: #415d79;
-  margin-top: 0.35rem;
+  color: var(--text-secondary);
+  margin-top: 6px;
+  font-size: 14px;
 }
 
 .favorite-actions {
-  margin-top: 0.9rem;
+  margin-top: 15px;
 }
 
 .favorite-btn {
-  border: 1px solid #2f76bb;
-  background: #2f76bb;
-  color: #ffffff;
-  border-radius: 10px;
-  padding: 0.5rem 0.8rem;
+  border: none;
+  background: var(--gradient);
+  color: white;
+  border-radius: var(--radius-sm);
+  padding: 10px 20px;
+  font-size: 14px;
   font-weight: 600;
+  font-family: inherit;
   cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.favorite-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-btn);
 }
 
 .favorite-btn:disabled {
-  opacity: 0.65;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
 .success-message {
-  margin-top: 0.5rem;
-  color: #1d7a46;
+  margin-top: 10px;
+  color: var(--success-text);
   font-weight: 600;
+  font-size: 14px;
 }
 
 .error-message {
-  margin-top: 0.5rem;
-  color: #b33636;
+  margin-top: 10px;
+  color: var(--error-text);
   font-weight: 600;
+  font-size: 14px;
 }
 
 .count-badge {
-  background: #e8f2fb;
-  color: #1e4f7a;
-  border-radius: 999px;
-  padding: 0.55rem 0.9rem;
+  background: rgba(102, 126, 234, 0.1);
+  color: var(--primary-dark);
+  border-radius: var(--radius-full);
+  padding: 8px 16px;
   font-weight: 700;
+  font-size: 14px;
   white-space: nowrap;
 }
 
 .albums-section {
-  margin-top: 1.4rem;
+  margin-top: 30px;
+  padding-top: 25px;
+  border-top: 1px solid var(--border);
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  gap: 20px;
+}
+
+h2 {
+  font-size: 20px;
+  color: var(--text-primary);
 }
 
 .album-list {
   list-style: none;
   padding: 0;
-  margin: 1rem 0 0;
+  margin: 15px 0 0;
   display: grid;
-  gap: 0.65rem;
+  gap: 10px;
 }
 
 .album-list li {
-  border: 1px solid #d8e5f2;
-  border-radius: 12px;
-  padding: 0.85rem 1rem;
-  background: #fbfdff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  background: #fafafa;
 }
 
 .album-list p,
 .empty-message {
-  color: #4e6b85;
-  margin-top: 0.3rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  font-size: 14px;
 }
 
 @media (max-width: 640px) {
+  .artist-detail-card {
+    padding: 25px;
+  }
+
   .artist-header,
   .section-header {
     flex-direction: column;

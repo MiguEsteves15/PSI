@@ -1,0 +1,200 @@
+<section class="profile-page">
+  <div class="profile-card">
+    <a [routerLink]="['/dashboard']" class="back-link">← Dashboard</a>
+
+    <h1>O meu perfil</h1>
+    <p class="subtitle">As tuas informações pessoais.</p>
+
+    @if (state$ | async; as state) {
+      @if (state.loading) {
+        <p class="info-message">A carregar perfil...</p>
+      }
+
+      @if (state.error) {
+        <div class="error-message">{{ state.error }}</div>
+      }
+
+      @if (state.profile; as p) {
+        <div class="profile-fields">
+          <div class="field">
+            <span class="field-label">Nome de utilizador</span>
+            <span class="field-value">{{ p.username }}</span>
+          </div>
+
+          <div class="field">
+            <span class="field-label">E-mail</span>
+            <span class="field-value">{{ p.email }}</span>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Data de nascimento</span>
+            <span class="field-value">{{ formatDate(p.dataNascimento) }}</span>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Artista favorito</span>
+            @if (p.artistaFavorito; as artista) {
+              <span class="field-value">
+                <a [routerLink]="['/artists', artista._id]" class="artist-link">
+                  {{ artista.nome }}
+                </a>
+              </span>
+            } @else {
+              <span class="field-value muted">Nenhum artista favorito definido</span>
+            }
+          </div>
+        </div>
+
+        <button type="button" class="edit-toggle-btn" (click)="toggleEdit()">
+          {{ showEdit ? 'Cancelar edição' : 'Editar perfil' }}
+        </button>
+
+        @if (showEdit) {
+          <div class="edit-section">
+            <div class="edit-form">
+              <h3>Alterar nome de utilizador</h3>
+              <form [formGroup]="usernameForm" (ngSubmit)="onUpdateUsername()">
+                <div class="form-group">
+                  <label for="new-username">Novo nome de utilizador</label>
+                  <input
+                    id="new-username"
+                    type="text"
+                    formControlName="newUsername"
+                    [placeholder]="p.username"
+                    autocomplete="username"
+                  />
+                  @if (usernameForm.get('newUsername')?.invalid && usernameForm.get('newUsername')?.touched) {
+                    <span class="field-error">Apenas letras e números, sem espaços.</span>
+                  }
+                </div>
+
+                <div class="form-group">
+                  <label for="username-current-pwd">Password atual</label>
+                  <input
+                    id="username-current-pwd"
+                    type="password"
+                    formControlName="currentPassword"
+                    autocomplete="current-password"
+                  />
+                </div>
+
+                @if (usernameSuccess) {
+                  <p class="success-msg">{{ usernameSuccess }}</p>
+                }
+                @if (usernameError) {
+                  <p class="error-msg">{{ usernameError }}</p>
+                }
+
+                <button type="submit" class="save-btn" [disabled]="usernameForm.invalid || usernameLoading">
+                  {{ usernameLoading ? 'A guardar...' : 'Guardar' }}
+                </button>
+              </form>
+            </div>
+
+            <div class="edit-form">
+              <h3>Alterar e-mail</h3>
+              <form [formGroup]="emailForm" (ngSubmit)="onUpdateEmail()">
+                <div class="form-group">
+                  <label for="new-email">Novo e-mail</label>
+                  <input id="new-email" type="email" formControlName="email" autocomplete="email" />
+                  @if (emailForm.get('email')?.invalid && emailForm.get('email')?.touched) {
+                    <span class="field-error">Introduz um e-mail válido.</span>
+                  }
+                </div>
+
+                <div class="form-group">
+                  <label for="email-current-pwd">Password atual</label>
+                  <input
+                    id="email-current-pwd"
+                    type="password"
+                    formControlName="currentPassword"
+                    autocomplete="current-password"
+                  />
+                </div>
+
+                @if (emailSuccess) {
+                  <p class="success-msg">{{ emailSuccess }}</p>
+                }
+                @if (emailError) {
+                  <p class="error-msg">{{ emailError }}</p>
+                }
+
+                <button type="submit" class="save-btn" [disabled]="emailForm.invalid || emailLoading">
+                  {{ emailLoading ? 'A guardar...' : 'Guardar' }}
+                </button>
+              </form>
+            </div>
+
+            <div class="edit-form">
+              <h3>Alterar data de nascimento</h3>
+              <form [formGroup]="birthDateForm" (ngSubmit)="onUpdateBirthDate()">
+                <div class="form-group">
+                  <label for="new-birth-date">Nova data de nascimento</label>
+                  <input id="new-birth-date" type="date" formControlName="dataNascimento" />
+                </div>
+
+                <div class="form-group">
+                  <label for="birth-current-pwd">Password atual</label>
+                  <input
+                    id="birth-current-pwd"
+                    type="password"
+                    formControlName="currentPassword"
+                    autocomplete="current-password"
+                  />
+                </div>
+
+                @if (birthDateSuccess) {
+                  <p class="success-msg">{{ birthDateSuccess }}</p>
+                }
+                @if (birthDateError) {
+                  <p class="error-msg">{{ birthDateError }}</p>
+                }
+
+                <button type="submit" class="save-btn" [disabled]="birthDateForm.invalid || birthDateLoading">
+                  {{ birthDateLoading ? 'A guardar...' : 'Guardar' }}
+                </button>
+              </form>
+            </div>
+
+            <div class="edit-form">
+              <h3>Alterar password</h3>
+              <form [formGroup]="passwordForm" (ngSubmit)="onUpdatePassword()">
+                <div class="form-group">
+                  <label for="current-pwd">Password atual</label>
+                  <input id="current-pwd" type="password" formControlName="currentPassword" autocomplete="current-password" />
+                </div>
+
+                <div class="form-group">
+                  <label for="new-pwd">Nova password</label>
+                  <input id="new-pwd" type="password" formControlName="newPassword" autocomplete="new-password" />
+                  @if (passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched) {
+                    <span class="field-error">Mínimo 8 caracteres, com maiúscula, minúscula e número.</span>
+                  }
+                </div>
+
+                <div class="form-group">
+                  <label for="confirm-pwd">Confirmar nova password</label>
+                  <input id="confirm-pwd" type="password" formControlName="confirmPassword" autocomplete="new-password" />
+                  @if (passwordForm.errors?.['passwordMismatch'] && passwordForm.get('confirmPassword')?.touched) {
+                    <span class="field-error">As passwords não coincidem.</span>
+                  }
+                </div>
+
+                @if (passwordSuccess) {
+                  <p class="success-msg">{{ passwordSuccess }}</p>
+                }
+                @if (passwordError) {
+                  <p class="error-msg">{{ passwordError }}</p>
+                }
+
+                <button type="submit" class="save-btn" [disabled]="passwordForm.invalid || passwordLoading">
+                  {{ passwordLoading ? 'A guardar...' : 'Guardar' }}
+                </button>
+              </form>
+            </div>
+          </div>
+        }
+      }
+    }
+  </div>
+</section>

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { map, Observable, switchMap } from 'rxjs';
@@ -30,10 +30,15 @@ export class ArtistDetailComponent implements OnInit {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
+    private readonly location: Location,
     private readonly artistApiService: ArtistApiService,
     private readonly userService: UserService,
     private readonly authService: AuthService
   ) {}
+
+  goBack(): void {
+    this.location.back();
+  }
 
   ngOnInit(): void {
     this.isAuthenticated = this.authService.isAuthenticated();
@@ -67,9 +72,16 @@ export class ArtistDetailComponent implements OnInit {
     this.favoriteErrorMessage = '';
     this.favoriteSuccessMessage = '';
 
+    const currentPassword = globalThis.prompt('Introduz a tua password para confirmar esta alteração:');
+    if (!currentPassword) {
+      this.favoriteActionLoading = false;
+      this.favoriteErrorMessage = 'Operacao cancelada. A password e obrigatoria.';
+      return;
+    }
+
     const request$ = this.isCurrentArtistFavorite(artistId)
-      ? this.userService.removeFavoriteArtist()
-      : this.userService.setFavoriteArtist(artistId);
+      ? this.userService.removeFavoriteArtist(currentPassword)
+      : this.userService.setFavoriteArtist(artistId, currentPassword);
 
     request$.subscribe({
       next: (response) => {

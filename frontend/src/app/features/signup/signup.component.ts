@@ -5,6 +5,43 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { PasswordValidators, DateValidators } from '../../validators/password.validators';
 
+const BASIC_EMAIL_REGEX = /^[^@\s]+@[^@\s]+$/;
+
+type ErrorRule = {
+  key: string;
+  message: string | ((errors: Record<string, any>) => string);
+};
+
+const FIELD_ERROR_RULES: Record<string, ErrorRule[]> = {
+  username: [
+    { key: 'required', message: 'Username é obrigatório' },
+    { key: 'pattern', message: 'Username só pode conter letras e números' }
+  ],
+  email: [
+    { key: 'required', message: 'Email é obrigatório' },
+    { key: 'pattern', message: 'Email inválido' }
+  ],
+  password: [
+    { key: 'required', message: 'Password é obrigatória' },
+    { key: 'minLength', message: 'Password deve ter pelo menos 8 caracteres' },
+    { key: 'uppercase', message: 'Password deve incluir uma letra maiúscula' },
+    { key: 'lowercase', message: 'Password deve incluir uma letra minúscula' },
+    { key: 'number', message: 'Password deve incluir um número' }
+  ],
+  confirmPassword: [
+    { key: 'required', message: 'Confirmação de password é obrigatória' }
+  ],
+  dataNascimento: [
+    { key: 'required', message: 'Data de nascimento é obrigatória' },
+    { key: 'invalidDate', message: 'Data inválida' },
+    { key: 'futureDate', message: 'A data de nascimento não pode ser no futuro' },
+    {
+      key: 'minAge',
+      message: (errors) => `Deve ter pelo menos ${errors['minAge'].requiredAge} anos`
+    }
+  ]
+};
+
 @Component({
   selector: 'app-signup',
   standalone: true,
@@ -29,9 +66,9 @@ export class SignupComponent {
   };
 
   constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
+    private readonly fb: FormBuilder,
+    private readonly authService: AuthService,
+    private readonly router: Router
   ) {
     this.initializeForm();
   }
@@ -46,7 +83,7 @@ export class SignupComponent {
     this.signupForm = this.fb.group(
       {
         username: ['', [Validators.required, Validators.pattern(/^[A-Za-z0-9]+$/)]],
-        email: ['', [Validators.required, Validators.email]],
+        email: ['', [Validators.required, Validators.pattern(BASIC_EMAIL_REGEX)]],
         password: ['', [Validators.required, PasswordValidators.strongPassword()]],
         confirmPassword: ['', Validators.required],
         dataNascimento: ['', [Validators.required, DateValidators.minAge(13)]]
@@ -126,45 +163,18 @@ export class SignupComponent {
   getErrorMessage(fieldName: string): string {
     const control = this.signupForm.get(fieldName);
 
-    if (!control || !control.errors || !control.touched) {
+    if (!control?.errors || !control.touched) {
       return '';
     }
 
-    switch (fieldName) {
-      case 'username':
-        if (control.errors['required']) return 'Username é obrigatório';
-        if (control.errors['pattern'])
-          return 'Username só pode conter letras e números';
-        break;
-      case 'email':
-        if (control.errors['required']) return 'Email é obrigatório';
-        if (control.errors['email']) return 'Email inválido';
-        break;
-      case 'password':
-        if (control.errors['required']) return 'Password é obrigatória';
-        if (control.errors['minLength'])
-          return 'Password deve ter pelo menos 8 caracteres';
-        if (control.errors['uppercase'])
-          return 'Password deve incluir uma letra maiúscula';
-        if (control.errors['lowercase'])
-          return 'Password deve incluir uma letra minúscula';
-        if (control.errors['number'])
-          return 'Password deve incluir um número';
-        break;
-      case 'confirmPassword':
-        if (control.errors['required'])
-          return 'Confirmação de password é obrigatória';
-        break;
-      case 'dataNascimento':
-        if (control.errors['required'])
-          return 'Data de nascimento é obrigatória';
-        if (control.errors['invalidDate'])
-          return 'Data inválida';
-        if (control.errors['futureDate'])
-          return 'A data de nascimento não pode ser no futuro';
-        if (control.errors['minAge'])
-          return `Deve ter pelo menos ${control.errors['minAge'].requiredAge} anos`;
-        break;
+    const rules = FIELD_ERROR_RULES[fieldName] || [];
+    for (const rule of rules) {
+      if (control.errors[rule.key]) {
+        if (typeof rule.message === 'function') {
+          return rule.message(control.errors);
+        }
+        return rule.message;
+      }
     }
 
     return '';

@@ -3,30 +3,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient);
   padding: 20px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
-    Arial, sans-serif;
 }
 
 .login-card {
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
   padding: 40px;
   width: 100%;
   max-width: 450px;
 }
 
 h1 {
-  color: #333;
+  color: var(--text-primary);
   font-size: 28px;
   margin: 0 0 10px 0;
   text-align: center;
 }
 
 .subtitle {
-  color: #666;
+  color: var(--text-secondary);
   text-align: center;
   margin: 0 0 25px 0;
   font-size: 14px;
@@ -36,7 +34,7 @@ h1 {
 .error-message,
 .success-message {
   padding: 12px 15px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   margin-bottom: 20px;
   font-size: 14px;
   display: flex;
@@ -45,15 +43,15 @@ h1 {
 }
 
 .error-message {
-  background-color: #fee;
-  color: #c33;
-  border: 1px solid #fcc;
+  background-color: var(--error-bg);
+  color: var(--error-text);
+  border: 1px solid var(--error-border);
 }
 
 .success-message {
-  background-color: #efe;
-  color: #3c3;
-  border: 1px solid #cfc;
+  background-color: var(--success-bg);
+  color: var(--success-text);
+  border: 1px solid var(--success-border);
 }
 
 /* Formulário */
@@ -70,7 +68,7 @@ h1 {
 }
 
 label {
-  color: #333;
+  color: var(--text-primary);
   font-weight: 500;
   font-size: 14px;
 }
@@ -78,8 +76,8 @@ label {
 input[type='text'],
 input[type='password'] {
   padding: 10px 12px;
-  border: 2px solid #e0e0e0;
-  border-radius: 6px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
   font-size: 14px;
   transition: border-color 0.3s;
   font-family: inherit;
@@ -88,13 +86,13 @@ input[type='password'] {
 input[type='text']:focus,
 input[type='password']:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--primary);
   box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2), inset 0 0 0 1px rgba(102, 126, 234, 0.1);
-  background-color: #f9fafb;
+  background-color: var(--bg-input);
 }
 
 input:disabled {
-  background-color: #f5f5f5;
+  background-color: var(--bg-disabled);
   cursor: not-allowed;
 }
 
@@ -130,7 +128,7 @@ input:disabled {
 
 /* Erros de Campo */
 .field-error {
-  color: #c33;
+  color: var(--error-text);
   font-size: 12px;
   margin-top: -2px;
 }
@@ -138,10 +136,10 @@ input:disabled {
 /* Botão */
 .submit-btn {
   padding: 12px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -151,7 +149,7 @@ input:disabled {
 
 .submit-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+  box-shadow: var(--shadow-btn);
 }
 
 .submit-btn:active:not(:disabled) {
@@ -191,24 +189,24 @@ input:disabled {
   text-align: center;
   margin-top: 20px;
   padding-top: 20px;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--border);
 }
 
 .signup-link p {
   margin: 0;
-  color: #666;
+  color: var(--text-secondary);
   font-size: 14px;
 }
 
 .signup-link a {
-  color: #667eea;
+  color: var(--primary);
   text-decoration: none;
   font-weight: 600;
   transition: color 0.2s;
 }
 
 .signup-link a:hover {
-  color: #764ba2;
+  color: var(--primary-dark);
 }
 
 /* Responsivo */

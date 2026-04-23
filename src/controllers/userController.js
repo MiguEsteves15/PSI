@@ -9,10 +9,61 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const TOKEN_EXPIRATION = process.env.TOKEN_EXPIRATION || '2h';
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 const USERNAME_REGEX = /^[A-Za-z0-9]+$/;
+const BASIC_EMAIL_REGEX = /^[^@\s]+@[^@\s]+$/;
+
+async function validateCurrentPassword(user, currentPassword) {
+    if (!currentPassword) {
+        return false;
+    }
+
+    return bcrypt.compare(currentPassword, user.password);
+}
+
+async function applyEmailUpdate(user, email) {
+    if (!email) {
+        return null;
+    }
+
+    if (typeof email !== 'string' || !BASIC_EMAIL_REGEX.test(email.trim())) {
+        return { status: 400, message: 'Email invalido.' };
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+    const existingUserByEmail = await User.findOne({ email: normalizedEmail });
+    if (existingUserByEmail && existingUserByEmail._id.toString() !== user._id.toString()) {
+        return { status: 409, message: 'Email ja registado.' };
+    }
+
+    user.email = normalizedEmail;
+    return null;
+}
+
+function applyBirthDateUpdate(user, dataNascimento) {
+    if (!dataNascimento) {
+        return null;
+    }
+
+    const parsedBirthDate = new Date(dataNascimento);
+    if (Number.isNaN(parsedBirthDate.getTime())) {
+        return { status: 400, message: 'dataNascimento invalida.' };
+    }
+
+    user.dataNascimento = parsedBirthDate;
+    return null;
+}
 
 exports.register = async (req, res) => {
     try {
         const { username, email, password, dataNascimento } = req.body;
+
+        if (typeof email !== 'string' || !BASIC_EMAIL_REGEX.test(email.trim())) {
+            return res.status(400).json({
+                success: false,
+                message: 'Email invalido.'
+            });
+        }
+
+        const normalizedEmail = email.trim().toLowerCase();
 
         // 1. Validação da password
         if (!PASSWORD_REGEX.test(password)) {
@@ -23,7 +74,7 @@ exports.register = async (req, res) => {
         }
 
         // 2. Verificar duplicados
-        const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+        const existingUser = await User.findOne({ $or: [{ username }, { email: normalizedEmail }] });
         if (existingUser) {
             return res.status(409).json({ success: false, message: 'Username ou email já registados.' });
         }
@@ -34,7 +85,7 @@ exports.register = async (req, res) => {
         // 4. Criar utilizador
         const newUser = new User({
             username,
-            email,
+            email: normalizedEmail,
             password: passwordHash,
             dataNascimento
         });
@@ -115,7 +166,7 @@ exports.getCurrentUserProfile = async (req, res) => {
 
 exports.updateUsername = async (req, res) => {
     try {
-        const { username } = req.body;
+        const { username, currentPassword } = req.body;
 
         if (!username || typeof username !== 'string' || !USERNAME_REGEX.test(username.trim())) {
             return res.status(400).json({success: false, message: 'O username deve conter apenas letras e numeros.'});
@@ -126,6 +177,11 @@ exports.updateUsername = async (req, res) => {
 
         if (!currentUser) {
             return res.status(404).json({ success: false, message: 'Utilizador nao encontrado.' });
+        }
+
+        const isCurrentPasswordValid = await validateCurrentPassword(currentUser, currentPassword);
+        if (!isCurrentPasswordValid) {
+            return res.status(401).json({ success: false, message: 'Password atual invalida.' });
         }
 
         if (currentUser.username === normalizedUsername) {
@@ -208,9 +264,105 @@ exports.updatePassword = async (req, res) => {
     }
 };
 
+exports.updateEmail = async (req, res) => {
+    try {
+        const { email, currentPassword } = req.body;
+
+        if (!email) {
+            return res.status(400).json({ success: false, message: 'Email e obrigatorio.' });
+        }
+
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'Utilizador nao encontrado.' });
+        }
+
+        const isCurrentPasswordValid = await validateCurrentPassword(user, currentPassword);
+        if (!isCurrentPasswordValid) {
+            return res.status(401).json({ success: false, message: 'Password atual invalida.' });
+        }
+
+        const emailError = await applyEmailUpdate(user, email);
+        if (emailError) {
+            return res.status(emailError.status).json({ success: false, message: emailError.message });
+        }
+
+        await user.save();
+
+        return res.status(200).json({
+            success: true,
+            message: 'Email atualizado com sucesso.',
+            data: {
+                user: {
+                    id: user._id,
+                    username: user.username,
+                    email: user.email,
+                    dataNascimento: user.dataNascimento
+                }
+            }
+        });
+    } catch (error) {
+        if (error.name === 'ValidationError') {
+            const messages = Object.values(error.errors).map((val) => val.message);
+            return res.status(400).json({ success: false, message: messages.join(', ') });
+        }
+
+        console.error(error);
+        return res.status(500).json({ success: false, message: 'Erro interno do servidor.' });
+    }
+};
+
+exports.updateBirthDate = async (req, res) => {
+    try {
+        const { dataNascimento, currentPassword } = req.body;
+
+        if (!dataNascimento) {
+            return res.status(400).json({ success: false, message: 'dataNascimento e obrigatoria.' });
+        }
+
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'Utilizador nao encontrado.' });
+        }
+
+        const isCurrentPasswordValid = await validateCurrentPassword(user, currentPassword);
+        if (!isCurrentPasswordValid) {
+            return res.status(401).json({ success: false, message: 'Password atual invalida.' });
+        }
+
+        const birthDateError = applyBirthDateUpdate(user, dataNascimento);
+        if (birthDateError) {
+            return res.status(birthDateError.status).json({ success: false, message: birthDateError.message });
+        }
+
+        await user.save();
+
+        return res.status(200).json({
+            success: true,
+            message: 'Data de nascimento atualizada com sucesso.',
+            data: {
+                user: {
+                    id: user._id,
+                    username: user.username,
+                    email: user.email,
+                    dataNascimento: user.dataNascimento
+                }
+            }
+        });
+    } catch (error) {
+        if (error.name === 'ValidationError') {
+            const messages = Object.values(error.errors).map((val) => val.message);
+            return res.status(400).json({ success: false, message: messages.join(', ') });
+        }
+
+        console.error(error);
+        return res.status(500).json({ success: false, message: 'Erro interno do servidor.' });
+    }
+};
+
 exports.setFavoriteArtist = async (req, res) => {
     try {
-        const { artistId } = req.body;
+        const { artistId, currentPassword } = req.body;
 
         if (!artistId || !mongoose.Types.ObjectId.isValid(artistId)) {
             return res.status(400).json({
@@ -226,6 +378,11 @@ exports.setFavoriteArtist = async (req, res) => {
 
         if (!user) {
             return res.status(404).json({ success: false, message: 'Utilizador nao encontrado.' });
+        }
+
+        const isCurrentPasswordValid = await validateCurrentPassword(user, currentPassword);
+        if (!isCurrentPasswordValid) {
+            return res.status(401).json({ success: false, message: 'Password atual invalida.' });
         }
 
         if (!artist) {
@@ -264,10 +421,16 @@ exports.setFavoriteArtist = async (req, res) => {
 
 exports.removeFavoriteArtist = async (req, res) => {
     try {
+        const { currentPassword } = req.body || {};
         const user = await User.findById(req.user.id);
 
         if (!user) {
             return res.status(404).json({ success: false, message: 'Utilizador nao encontrado.' });
+        }
+
+        const isCurrentPasswordValid = await validateCurrentPassword(user, currentPassword);
+        if (!isCurrentPasswordValid) {
+            return res.status(401).json({ success: false, message: 'Password atual invalida.' });
         }
 
         if (!user.artistaFavorito) {

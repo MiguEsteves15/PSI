@@ -1,6 +1,6 @@
 <section class="artist-albums-page" *ngIf="artistAlbums$ | async as detail">
   <div class="artist-albums-card">
-    <a class="back-link" [routerLink]="['/artists', detail.artist._id]">&larr; Voltar ao artista</a>
+    <a class="back-link" (click)="goBack()">&larr; Voltar</a>
 
     <div class="header-block">
       <div>

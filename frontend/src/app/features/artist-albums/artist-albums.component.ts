@@ -1,6 +1,6 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { map, Observable, switchMap } from 'rxjs';
 import { AlbumListItem, ArtistApiService, ArtistDetail } from '../artist-search/artist-api.service';
 
@@ -12,7 +12,7 @@ interface ArtistAlbumsViewModel {
 @Component({
   selector: 'app-artist-albums',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './artist-albums.component.html',
   styleUrl: './artist-albums.component.css'
 })
@@ -21,8 +21,13 @@ export class ArtistAlbumsComponent implements OnInit {
 
   constructor(
     private readonly route: ActivatedRoute,
+    private readonly location: Location,
     private readonly artistApiService: ArtistApiService
   ) {}
+
+  goBack(): void {
+    this.location.back();
+  }
 
   ngOnInit(): void {
     this.artistAlbums$ = this.route.paramMap.pipe(

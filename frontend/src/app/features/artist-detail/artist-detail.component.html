@@ -1,6 +1,6 @@
 <section class="artist-detail-page" *ngIf="artistDetail$ | async as detail">
   <div class="artist-detail-card">
-    <a class="back-link" routerLink="/">&larr; Voltar à pesquisa</a>
+    <a class="back-link" (click)="goBack()">&larr; Voltar</a>
 
     <div class="artist-header">
       <div>

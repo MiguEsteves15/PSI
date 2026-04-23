@@ -1,31 +1,38 @@
 .artist-albums-page {
-  min-height: 100dvh;
-  padding: 1.25rem;
-  background: linear-gradient(135deg, #f7fbff 0%, #eef6ff 52%, #f8fbf6 100%);
+  min-height: 100vh;
+  background: var(--gradient);
+  padding: 20px;
 }
 
 .artist-albums-card {
-  width: min(100%, 860px);
+  width: 100%;
+  max-width: 860px;
   margin: 0 auto;
-  background: #ffffff;
-  border: 1px solid #d7e6f5;
-  border-radius: 16px;
-  box-shadow: 0 12px 30px rgba(10, 40, 80, 0.08);
-  padding: 1.25rem;
+  background: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 40px;
 }
 
 .back-link {
-  color: #2f76bb;
+  color: var(--primary);
   text-decoration: none;
   font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: var(--primary-dark);
 }
 
 .eyebrow {
-  margin: 1rem 0 0.35rem;
+  margin: 20px 0 6px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #6b7f95;
-  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-size: 11px;
 }
 
 h1,
@@ -34,35 +41,40 @@ p {
 }
 
 h1 {
-  font-size: 2rem;
-  color: #12263a;
+  font-size: 28px;
+  color: var(--text-primary);
 }
 
 .meta,
 .empty-message,
 .album-list span {
-  color: #4e6b85;
+  color: var(--text-secondary);
+  font-size: 14px;
 }
 
 .album-list {
   list-style: none;
   padding: 0;
-  margin: 1rem 0 0;
+  margin: 15px 0 0;
   display: grid;
-  gap: 0.65rem;
+  gap: 10px;
 }
 
 .album-list li {
-  border: 1px solid #d8e5f2;
-  border-radius: 12px;
-  padding: 0.85rem 1rem;
-  background: #fbfdff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  background: #fafafa;
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 20px;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 480px) {
+  .artist-albums-card {
+    padding: 25px;
+  }
+
   .album-list li {
     flex-direction: column;
     align-items: flex-start;
