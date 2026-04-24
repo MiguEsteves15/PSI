@@ -34,12 +34,12 @@ export class UserService {
     }
 
     // US7
-    setFavoriteArtist(artistId: string, currentPassword: string): Observable<any> {
-        return this.http.put(`${this.apiUrl}/favorite-artist`, { artistId, currentPassword });
+    setFavoriteArtist(artistId: string): Observable<any> {
+        return this.http.put(`${this.apiUrl}/favorite-artist`, { artistId });
     }
 
     // US7
-    removeFavoriteArtist(currentPassword: string): Observable<any> {
-        return this.http.delete(`${this.apiUrl}/favorite-artist`, { body: { currentPassword } });
+    removeFavoriteArtist(): Observable<any> {
+        return this.http.delete(`${this.apiUrl}/favorite-artist`);
     }
 }

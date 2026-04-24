@@ -72,16 +72,9 @@ export class ArtistDetailComponent implements OnInit {
     this.favoriteErrorMessage = '';
     this.favoriteSuccessMessage = '';
 
-    const currentPassword = globalThis.prompt('Introduz a tua password para confirmar esta alteração:');
-    if (!currentPassword) {
-      this.favoriteActionLoading = false;
-      this.favoriteErrorMessage = 'Operacao cancelada. A password e obrigatoria.';
-      return;
-    }
-
     const request$ = this.isCurrentArtistFavorite(artistId)
-      ? this.userService.removeFavoriteArtist(currentPassword)
-      : this.userService.setFavoriteArtist(artistId, currentPassword);
+      ? this.userService.removeFavoriteArtist()
+      : this.userService.setFavoriteArtist(artistId);
 
     request$.subscribe({
       next: (response) => {

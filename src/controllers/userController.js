@@ -362,7 +362,7 @@ exports.updateBirthDate = async (req, res) => {
 
 exports.setFavoriteArtist = async (req, res) => {
     try {
-        const { artistId, currentPassword } = req.body;
+        const { artistId } = req.body;
 
         if (!artistId || !mongoose.Types.ObjectId.isValid(artistId)) {
             return res.status(400).json({
@@ -378,11 +378,6 @@ exports.setFavoriteArtist = async (req, res) => {
 
         if (!user) {
             return res.status(404).json({ success: false, message: 'Utilizador nao encontrado.' });
-        }
-
-        const isCurrentPasswordValid = await validateCurrentPassword(user, currentPassword);
-        if (!isCurrentPasswordValid) {
-            return res.status(401).json({ success: false, message: 'Password atual invalida.' });
         }
 
         if (!artist) {
@@ -421,16 +416,10 @@ exports.setFavoriteArtist = async (req, res) => {
 
 exports.removeFavoriteArtist = async (req, res) => {
     try {
-        const { currentPassword } = req.body || {};
         const user = await User.findById(req.user.id);
 
         if (!user) {
             return res.status(404).json({ success: false, message: 'Utilizador nao encontrado.' });
-        }
-
-        const isCurrentPasswordValid = await validateCurrentPassword(user, currentPassword);
-        if (!isCurrentPasswordValid) {
-            return res.status(401).json({ success: false, message: 'Password atual invalida.' });
         }
 
         if (!user.artistaFavorito) {
