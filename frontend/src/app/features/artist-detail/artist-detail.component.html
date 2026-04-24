@@ -12,7 +12,6 @@
           <button
             type="button"
             class="favorite-btn"
-            [disabled]="favoriteActionLoading"
             (click)="onFavoriteToggle(detail.artist._id)">
             {{
               !isAuthenticated

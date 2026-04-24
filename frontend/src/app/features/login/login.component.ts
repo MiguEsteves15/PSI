@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -21,7 +21,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {
     this.initializeForm();
   }
@@ -57,10 +58,12 @@ export class LoginComponent {
         this.isLoading = false;
         if (response.success) {
           this.successMessage = response.message || 'Login bem-sucedido!';
+          this.cdr.detectChanges();
           setTimeout(() => {
             this.router.navigate(['/dashboard']);
           }, 1000);
         }
+        this.cdr.detectChanges();
       },
       error: (error) => {
         this.isLoading = false;
@@ -73,6 +76,7 @@ export class LoginComponent {
           console.error('Erro completo:', error);
           this.errorMessage = 'Erro ao fazer login. Tente novamente.';
         }
+        this.cdr.detectChanges();
       }
     });
   }

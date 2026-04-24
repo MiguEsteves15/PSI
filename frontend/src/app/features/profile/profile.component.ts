@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, Validators, AbstractControl } from '@angular/forms';
@@ -42,6 +42,7 @@ function passwordsMatch(group: AbstractControl): { passwordMismatch: true } | nu
 export class ProfileComponent {
   private readonly userService = inject(UserService);
   private readonly fb = inject(FormBuilder);
+  private readonly cdr = inject(ChangeDetectorRef);
   private readonly refresh$ = new BehaviorSubject<void>(undefined);
 
   readonly state$: Observable<ProfileState> = this.refresh$.pipe(
@@ -163,10 +164,12 @@ export class ProfileComponent {
         } else {
           this.usernameError = response.message || 'Erro ao atualizar username.';
         }
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.usernameLoading = false;
         this.usernameError = err?.error?.message || 'Erro ao atualizar username.';
+        this.cdr.detectChanges();
       }
     });
   }
@@ -190,10 +193,12 @@ export class ProfileComponent {
         } else {
           this.emailError = response.message || 'Erro ao atualizar email.';
         }
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.emailLoading = false;
         this.emailError = err?.error?.message || 'Erro ao atualizar email.';
+        this.cdr.detectChanges();
       }
     });
   }
@@ -217,10 +222,12 @@ export class ProfileComponent {
         } else {
           this.birthDateError = response.message || 'Erro ao atualizar data de nascimento.';
         }
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.birthDateLoading = false;
         this.birthDateError = err?.error?.message || 'Erro ao atualizar data de nascimento.';
+        this.cdr.detectChanges();
       }
     });
   }
@@ -243,10 +250,12 @@ export class ProfileComponent {
         } else {
           this.passwordError = response.message || 'Erro ao atualizar password.';
         }
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.passwordLoading = false;
         this.passwordError = err?.error?.message || 'Erro ao atualizar password.';
+        this.cdr.detectChanges();
       }
     });
   }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -68,7 +68,8 @@ export class SignupComponent {
   constructor(
     private readonly fb: FormBuilder,
     private readonly authService: AuthService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly cdr: ChangeDetectorRef
   ) {
     this.initializeForm();
   }
@@ -138,10 +139,12 @@ export class SignupComponent {
         this.isLoading = false;
         if (response.success) {
           this.successMessage = response.message || 'Conta criada com sucesso!';
+          this.cdr.detectChanges();
           setTimeout(() => {
             this.router.navigate(['/login']);
           }, 4000);
         }
+        this.cdr.detectChanges();
       },
       error: (error) => {
         this.isLoading = false;
@@ -156,6 +159,7 @@ export class SignupComponent {
           console.error('Erro completo:', error);
           this.errorMessage = 'Erro ao criar a conta. Tente novamente.';
         }
+        this.cdr.detectChanges();
       }
     });
   }

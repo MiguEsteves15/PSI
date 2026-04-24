@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -23,7 +23,10 @@ export class ArtistSearchComponent implements OnDestroy {
   private readonly queryChanges$ = new Subject<string>();
   private readonly subscription: Subscription;
 
-  constructor(private readonly artistApiService: ArtistApiService) {
+  constructor(
+    private readonly artistApiService: ArtistApiService,
+    private readonly cdr: ChangeDetectorRef
+  ) {
     this.subscription = this.queryChanges$
       .pipe(
         debounceTime(100),
@@ -46,6 +49,7 @@ export class ArtistSearchComponent implements OnDestroy {
         this.artists = response.data ?? [];
         this.isLoading = false;
         this.hasSearched = true;
+        this.cdr.detectChanges();
       });
   }
 
