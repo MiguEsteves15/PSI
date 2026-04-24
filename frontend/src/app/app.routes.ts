@@ -6,13 +6,13 @@ import { SignupComponent } from './features/signup/signup.component';
 import { LoginComponent } from './features/login/login.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { ProfileComponent } from './features/profile/profile.component';
+import { SplashComponent } from './features/splash/splash.component';
 import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
 	{
 		path: '',
-		redirectTo: '/login',
-		pathMatch: 'full'
+		component: SplashComponent
 	},
 	{
 		path: 'login',

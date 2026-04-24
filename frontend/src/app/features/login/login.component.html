@@ -1,82 +1,81 @@
 <section class="login-page">
   <div class="login-card">
-    <nav class="navbar">
-      <div class="navbar-content">
-        <h1 class="logo">🎵 Gestor de Coleções 🎵</h1>
-        <h1 class=""></h1>
-      </div>
-    </nav>
-    <h1>Iniciar Sessão</h1>
-    <p class="subtitle">Preencha os dados para aceder à aplicação.</p>
-
-    <!-- Mensagem de Erro -->
-    <div *ngIf="errorMessage" class="error-message">
-      <span>⚠️ {{ errorMessage }}</span>
+    <div class="card-header">
+      <h1 class="logo">🎵 Gestor de Coleções 🎵</h1>
     </div>
+    <div class="card-body">
+      <h2 class="title">Iniciar Sessão</h2>
+      <p class="subtitle">Preencha os dados para aceder à aplicação.</p>
 
-    <!-- Mensagem de Sucesso -->
-    <div *ngIf="successMessage" class="success-message">
-      <span>✓ {{ successMessage }}</span>
-    </div>
-
-    <!-- Formulário -->
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-      <!-- Username -->
-      <div class="form-group">
-        <label for="username">Username *</label>
-        <input
-          id="username"
-          type="text"
-          formControlName="username"
-          placeholder="Ex.: joao123"
-          autocomplete="username"
-        />
-        <span class="field-error" *ngIf="getErrorMessage('username')">
-          {{ getErrorMessage('username') }}
-        </span>
+      <!-- Mensagem de Erro -->
+      <div *ngIf="errorMessage" class="error-message">
+        <span>⚠️ {{ errorMessage }}</span>
       </div>
 
-      <!-- Password -->
-      <div class="form-group">
-        <label for="password">Password *</label>
-        <div class="password-input">
+      <!-- Mensagem de Sucesso -->
+      <div *ngIf="successMessage" class="success-message">
+        <span>✓ {{ successMessage }}</span>
+      </div>
+
+      <!-- Formulário -->
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        <!-- Username -->
+        <div class="form-group">
+          <label for="username">Username *</label>
           <input
-            id="password"
-            [type]="showPassword ? 'text' : 'password'"
-            formControlName="password"
-            placeholder="Introduza a sua password"
-            autocomplete="current-password"
+            id="username"
+            type="text"
+            formControlName="username"
+            placeholder="Ex.: joao123"
+            autocomplete="username"
           />
-          <button
-            type="button"
-            class="toggle-password"
-            (click)="togglePasswordVisibility()"
-            [title]="showPassword ? 'Ocultar' : 'Mostrar'"
-          >
-            {{ showPassword ? '👁️‍🗨️' : '👁️' }}
-          </button>
+          <span class="field-error" *ngIf="getErrorMessage('username')">
+            {{ getErrorMessage('username') }}
+          </span>
         </div>
-        <span class="field-error" *ngIf="getErrorMessage('password')">
-          {{ getErrorMessage('password') }}
-        </span>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label for="password">Password *</label>
+          <div class="password-input">
+            <input
+              id="password"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Introduza a sua password"
+              autocomplete="current-password"
+            />
+            <button
+              type="button"
+              class="toggle-password"
+              (click)="togglePasswordVisibility()"
+              [title]="showPassword ? 'Ocultar' : 'Mostrar'"
+            >
+              {{ showPassword ? '👁️‍🗨️' : '👁️' }}
+            </button>
+          </div>
+          <span class="field-error" *ngIf="getErrorMessage('password')">
+            {{ getErrorMessage('password') }}
+          </span>
+        </div>
+
+        <!-- Botão Submit -->
+        <button
+          type="submit"
+          class="submit-btn"
+          [disabled]="loginForm.invalid || isLoading"
+        >
+          <span class="btn-content">
+            <span *ngIf="isLoading" class="spinner"></span>
+            {{ isLoading ? 'A fazer login...' : 'Iniciar Sessão' }}
+          </span>
+        </button>
+      </form>
+
+      <!-- Link para Signup -->
+      <div class="signup-link">
+        <p>Não tem conta? <a [routerLink]="['/signup']">Criar conta</a></p>
       </div>
-
-      <!-- Botão Submit -->
-      <button
-        type="submit"
-        class="submit-btn"
-        [disabled]="loginForm.invalid || isLoading"
-      >
-        <span class="btn-content">
-          <span *ngIf="isLoading" class="spinner"></span>
-          {{ isLoading ? 'A fazer login...' : 'Iniciar Sessão' }}
-        </span>
-      </button>
-    </form>
-
-    <!-- Link para Signup -->
-    <div class="signup-link">
-      <p>Não tem conta? <a [routerLink]="['/signup']">Criar conta</a></p>
     </div>
   </div>
 </section>

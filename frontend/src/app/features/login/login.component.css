@@ -11,16 +11,35 @@
   background: white;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-card);
-  padding: 40px;
   width: 100%;
   max-width: 450px;
+  overflow: hidden;
 }
 
-h1 {
-  color: var(--text-primary);
-  font-size: 28px;
-  margin: 0 0 10px 0;
+.card-header {
+  background: linear-gradient(135deg, #667ee9 0%, #764ba2 100%);
+  padding: 30px 40px;
   text-align: center;
+}
+
+.card-header .logo {
+  color: white;
+  font-size: 28px;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.card-body {
+  padding: 40px;
+}
+
+.title {
+  color: var(--text-primary);
+  font-size: 24px;
+  margin: 0 0 8px 0;
+  text-align: center;
+  font-weight: 700;
 }
 
 .subtitle {
@@ -211,12 +230,20 @@ input:disabled {
 
 /* Responsivo */
 @media (max-width: 480px) {
-  .login-card {
+  .card-header {
+    padding: 25px 30px;
+  }
+
+  .card-header .logo {
+    font-size: 24px;
+  }
+
+  .card-body {
     padding: 25px;
   }
 
-  h1 {
-    font-size: 24px;
+  .title {
+    font-size: 22px;
   }
 
   .login-form {

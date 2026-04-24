@@ -6,3 +6,28 @@
 .app-shell {
 	min-height: 100dvh;
 }
+
+/* Animação de transição para router-outlet */
+::ng-deep {
+	/* Fade-in para componentes que apareçam */
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+	/* Aplicar fade-in a todos os componentes principais */
+	app-login,
+	app-signup,
+	app-dashboard,
+	app-profile,
+	app-artist-search,
+	app-artist-detail,
+	app-artist-albums {
+		animation: fadeIn 0.5s ease-in-out;
+		display: block;
+	}
+}

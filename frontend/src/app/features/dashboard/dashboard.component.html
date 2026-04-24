@@ -3,40 +3,53 @@
     <!-- Navbar -->
     <nav class="navbar">
       <div class="navbar-content">
+        <!-- Logo -->
         <h1 class="logo">🎵 Gestor de Coleções</h1>
+
+        <!-- Search Bar -->
+        <div class="search-bar-container">
+          <input
+            type="text"
+            class="search-input"
+            [value]="searchQuery"
+            (input)="onSearchChange($event.target.value)"
+            placeholder="Pesquisar artistas..."
+            autocomplete="off"
+          />
+
+          <!-- Search Results Dropdown -->
+          <div class="search-results-dropdown" *ngIf="showSearchResults && (searchResults.length > 0 || isSearching || searchError)">
+            <div *ngIf="isSearching" class="loading">A pesquisar...</div>
+            <div *ngIf="searchError" class="error">{{ searchError }}</div>
+            <ul class="results-list" *ngIf="searchResults.length > 0">
+              <li *ngFor="let artist of searchResults">
+                <a (click)="onNavigateToArtist(artist._id)" class="result-item">
+                  <strong>{{ artist.nome }}</strong>
+                  <span class="isni">{{ artist.isni }}</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Profile Section -->
         <div class="navbar-right">
-          <span class="username">{{ username }}</span>
-          <button class="logout-btn" (click)="onLogout()">Logout</button>
+          <div class="profile-menu-container">
+            <button class="profile-btn" (click)="toggleProfileMenu()">
+              <span class="avatar">👤</span>
+              <span class="username">{{ username }}</span>
+            </button>
+            <div class="profile-menu" *ngIf="showProfileMenu">
+              <a (click)="onNavigateToProfile()" class="menu-item">Ver Perfil</a>
+              <a (click)="onLogout()" class="menu-item logout-item">Logout</a>
+            </div>
+          </div>
         </div>
       </div>
     </nav>
 
     <!-- Main Content -->
     <div class="main-content">
-      <div class="welcome-section">
-        <h2>Bem-vindo, {{ username }}! 🎉</h2>
-        <p>Explore artistas, álbuns e faça a gestão da sua coleção musical.</p>
-      </div>
-
-      <!-- Features Grid -->
-      <div class="features-grid">
-        <!-- Pesquisar Artistas -->
-        <div class="feature-card">
-          <div class="card-icon">🎤</div>
-          <h3>Pesquisar Artistas</h3>
-          <p>Procure artistas por nome e descubra os seus álbuns.</p>
-          <a [routerLink]="['/search']" class="card-link">Ir para Pesquisa</a>
-        </div>
-
-        <!-- Ver Perfil -->
-        <div class="feature-card">
-          <div class="card-icon">👤</div>
-          <h3>Perfil</h3>
-          <p>Visualize as suas informações pessoais.</p>
-          <a [routerLink]="['/profile']" class="card-link">Ver Perfil</a>
-        </div>
-
-      </div>
     </div>
   </div>
 </section>
