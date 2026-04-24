@@ -1,3 +1,25 @@
+/* Definição local de variáveis em falta */
+:host {
+  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.1);
+  --shadow-btn: 0 5px 15px rgba(102, 126, 234, 0.3);
+  --border: #e0e0e0;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --primary: #667eea;
+  --primary-dark: #764ba2;
+  --bg-input: #f9fafb;
+  --bg-disabled: #f5f5f5;
+  --error-bg: #fee;
+  --error-text: #c33;
+  --error-border: #fcc;
+  --success-bg: #efe;
+  --success-text: #3c3;
+  --success-border: #cfc;
+}
 .profile-page {
   min-height: 100vh;
   display: flex;
